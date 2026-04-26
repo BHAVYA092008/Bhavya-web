@@ -3,12 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, Search, User, Menu, X, LogOut } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { useSettings } from "../context/SettingsContext";
+import { fileUrl } from "../lib/api";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const { count } = useCart();
   const { user, logout } = useAuth();
+  const s = useSettings();
   const navigate = useNavigate();
 
   const onSearch = (e) => {
@@ -20,8 +23,12 @@ export default function Header() {
     <header className="sticky top-0 z-40 bg-[#FFFDF0]/90 backdrop-blur-xl border-b-2 border-black" data-testid="site-header">
       <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2" data-testid="header-logo">
-          <div className="w-9 h-9 bg-[#FF9E79] border-2 border-black flex items-center justify-center font-display text-xl font-black">G</div>
-          <span className="font-display text-xl font-black tracking-tight hidden sm:block">GS CUSTOMIZE HUB</span>
+          {s.logo ? (
+            <img src={fileUrl(s.logo)} alt="logo" className="w-10 h-10 border-2 border-black bg-white object-contain"/>
+          ) : (
+            <div className="w-9 h-9 bg-[#FF9E79] border-2 border-black flex items-center justify-center font-display text-xl font-black">G</div>
+          )}
+          <span className="font-display text-xl font-black tracking-tight hidden sm:block">{s.site_name?.toUpperCase()}</span>
         </Link>
 
         <form onSubmit={onSearch} className="hidden md:flex flex-1 max-w-md">

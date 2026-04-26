@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, ShoppingBag, Package, LogOut } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Package, LogOut, Settings } from "lucide-react";
 
 export default function AdminLayout({ children }) {
   const navigate = useNavigate();
@@ -28,6 +28,7 @@ export default function AdminLayout({ children }) {
           <NavLink to="/admin/dashboard" className={linkCls} data-testid="admin-nav-dashboard"><LayoutDashboard size={16}/> Dashboard</NavLink>
           <NavLink to="/admin/orders" className={linkCls} data-testid="admin-nav-orders"><ShoppingBag size={16}/> Orders</NavLink>
           <NavLink to="/admin/products" className={linkCls} data-testid="admin-nav-products"><Package size={16}/> Products</NavLink>
+          <NavLink to="/admin/settings" className={linkCls} data-testid="admin-nav-settings"><Settings size={16}/> Settings</NavLink>
         </nav>
         <main>{children}</main>
       </div>

@@ -1,12 +1,14 @@
 import React from "react";
-
-const WHATSAPP = process.env.REACT_APP_WHATSAPP_NUMBER || "919999999999";
+import { useSettings } from "../context/SettingsContext";
 
 export default function WhatsAppButton() {
+  const s = useSettings();
+  const number = (s.whatsapp || "").replace(/[^0-9]/g, "");
+  if (!number) return null;
   return (
     <a
       data-testid="whatsapp-float-btn"
-      href={`https://wa.me/${WHATSAPP}?text=Hi%20GS%20Customize%20Hub%2C%20I%20need%20help%20with%20my%20order`}
+      href={`https://wa.me/${number}?text=Hi%20${encodeURIComponent(s.site_name || "GS Customize Hub")}%2C%20I%20need%20help%20with%20my%20order`}
       target="_blank"
       rel="noopener noreferrer"
       className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] border-2 border-black brut-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] transition-transform flex items-center justify-center"

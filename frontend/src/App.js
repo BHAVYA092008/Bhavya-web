@@ -3,6 +3,7 @@ import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { SettingsProvider } from "./context/SettingsContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -19,6 +20,7 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminOrders from "./pages/admin/AdminOrders";
+import AdminSettings from "./pages/admin/AdminSettings";
 import AdminGuard from "./pages/admin/AdminGuard";
 
 function Layout({ children }) {
@@ -38,25 +40,28 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <CartProvider>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/product/:id" element={<ProductDetail />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/order/:id" element={<OrderTrack />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin/dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
-              <Route path="/admin/products" element={<AdminGuard><AdminProducts /></AdminGuard>} />
-              <Route path="/admin/orders" element={<AdminGuard><AdminOrders /></AdminGuard>} />
-            </Routes>
-          </Layout>
-        </CartProvider>
+        <SettingsProvider>
+          <CartProvider>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/order/:id" element={<OrderTrack />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin/dashboard" element={<AdminGuard><AdminDashboard /></AdminGuard>} />
+                <Route path="/admin/products" element={<AdminGuard><AdminProducts /></AdminGuard>} />
+                <Route path="/admin/orders" element={<AdminGuard><AdminOrders /></AdminGuard>} />
+                <Route path="/admin/settings" element={<AdminGuard><AdminSettings /></AdminGuard>} />
+              </Routes>
+            </Layout>
+          </CartProvider>
+        </SettingsProvider>
       </AuthProvider>
     </BrowserRouter>
   );

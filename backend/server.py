@@ -178,6 +178,19 @@ class CouponBody(BaseModel):
 class CreateRazorpayOrderBody(BaseModel):
     amount: float  # in INR rupees
 
+class SettingsBody(BaseModel):
+    site_name: Optional[str] = "GS Customize Hub"
+    tagline: Optional[str] = ""
+    phone: Optional[str] = ""
+    email: Optional[str] = ""
+    address: Optional[str] = ""
+    whatsapp: Optional[str] = ""
+    facebook: Optional[str] = ""
+    instagram: Optional[str] = ""
+    youtube: Optional[str] = ""
+    twitter: Optional[str] = ""
+    logo: Optional[str] = ""  # storage path or URL
+
 # ----------- Auth Routes -----------
 @api_router.post("/auth/signup")
 async def signup(body: SignupBody):
@@ -463,6 +476,37 @@ async def admin_dashboard(_: dict = Depends(require_admin)):
         "earnings": round(earnings, 2),
         "recent": recent,
     }
+
+# ----------- Site Settings -----------
+DEFAULT_SETTINGS = {
+    "site_name": "GS Customize Hub",
+    "tagline": "Personalized gifts that tell your story",
+    "phone": "+91 99999 99999",
+    "email": "hello@gscustomizehub.com",
+    "address": "India",
+    "whatsapp": "919999999999",
+    "facebook": "",
+    "instagram": "",
+    "youtube": "",
+    "twitter": "",
+    "logo": "",
+}
+
+@api_router.get("/settings")
+async def get_settings():
+    doc = await db.settings.find_one({"key": "site"}, {"_id": 0})
+    if not doc:
+        return DEFAULT_SETTINGS
+    return {k: doc.get(k, v) for k, v in DEFAULT_SETTINGS.items()}
+
+@api_router.put("/admin/settings")
+async def update_settings(body: SettingsBody, _: dict = Depends(require_admin)):
+    update = body.model_dump()
+    update["key"] = "site"
+    update["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.settings.update_one({"key": "site"}, {"$set": update}, upsert=True)
+    doc = await db.settings.find_one({"key": "site"}, {"_id": 0})
+    return doc
 
 # ----------- Seed Data -----------
 async def seed_initial_data():

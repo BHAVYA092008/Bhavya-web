@@ -1,0 +1,117 @@
+{
+  "theme": "LIGHT",
+  "archetype": "3 (Pastel & Soft) mixed with Neo-Brutalism (E1 Twist)",
+  "emotional_tone": "Optimistic, Joyful, Approachable, Tactile, Modern",
+  "instructions_to_main_agent": [
+    "Use pure HTML and Tailwind for marketing/landing page structure; use Shadcn UI exclusively for complex interactions (forms, dialogs, selects, tabs).",
+    "Customize Shadcn components to fit the Neo-Brutalist theme: remove border radius (rounded-none), add heavy borders (border-2 border-black), and solid block shadows (shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]).",
+    "Never use purely transparent headers. Use glassmorphism or a solid background.",
+    "Implement a split-pane layout for the product customization page: Sticky left side for the live product preview, scrollable right side for customization tools (photo upload, text input, color selection).",
+    "Every interactive or key informational element MUST have a data-testid attribute formatted as kebab-case, role-based.",
+    "Ensure high contrast ratios (APCA/WCAG AA) especially on text over colored backgrounds.",
+    "Use react-fast-marquee for a kinetic typography effect in the background of category sections.",
+    "Implement hover states that remove the block shadow and translate the element by 2px/4px to simulate a button press.",
+    "Include WhatsApp chat button globally.",
+    "Generate .js and .jsx files, NOT .ts or .tsx."
+  ],
+  "typography": {
+    "fonts_to_import": "https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Work+Sans:wght@400;500;700&display=swap",
+    "headings": {
+      "family": "font-['Cabinet_Grotesk',_sans-serif]",
+      "style": "font-black tracking-tighter uppercase text-black",
+      "scale": "fluid text-4xl md:text-5xl lg:text-6xl"
+    },
+    "body": {
+      "family": "font-['Work_Sans',_sans-serif]",
+      "style": "font-medium leading-relaxed tracking-tight text-[#0F0F0F]",
+      "scale": "text-base md:text-lg"
+    },
+    "labels": {
+      "style": "font-bold uppercase tracking-[0.2em] text-xs text-[#0F0F0F]"
+    }
+  },
+  "colors": {
+    "background": {
+      "primary": "bg-[#FFFDF0]",
+      "secondary": "bg-[#FFE5D9]"
+    },
+    "surface": {
+      "card": "bg-white",
+      "glass": "bg-white/80 backdrop-blur-xl border-b-2 border-black"
+    },
+    "border": {
+      "primary": "border-[#0F0F0F]",
+      "light": "border-[#D1D1D1]"
+    },
+    "text": {
+      "primary": "text-[#0F0F0F]",
+      "secondary": "text-[#4A4A4A]",
+      "inverse": "text-[#FFFDF0]"
+    },
+    "accent": {
+      "primary": "bg-[#FF9E79]",
+      "hover": "hover:bg-[#FF7A4B]"
+    }
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing (p-8, p-12) mixed with Neo-Brutalist heavy borders. Optical alignment.",
+    "container": "max-w-7xl mx-auto px-6 md:px-12",
+    "grid": {
+      "bento": "grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8",
+      "cards": "col-span-full md:col-span-6 lg:col-span-4"
+    },
+    "surface_strategy": "Neumorphism/Tactile Variant - Mix hard flat backgrounds with sharp 2px black borders and hard solid shadows (shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]). No soft rounded edges."
+  },
+  "components_strategy": {
+    "buttons": "Hard rectangular shapes (rounded-none), border-2 border-black, solid block shadows (shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]) that transition to translate-y-[4px] translate-x-[4px] shadow-none on hover. Use Work Sans font-bold uppercase.",
+    "cards": "border-2 border-black bg-white rounded-none p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)].",
+    "inputs": "Shadcn input highly customized: border-2 border-black rounded-none focus:ring-0 focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white text-black.",
+    "marquee": "react-fast-marquee. Kinetic Texture: massive outline text (text-8xl+) running in background for categories.",
+    "pdp_customization": "Split-pane layout. Left: sticky product visualization wrapper. Right: scrolling customizer options form (Upload, Text, Color)."
+  },
+  "motion_and_interactions": {
+    "hover_states": "Hard block shadow removal on click/hover, translate elements diagonally to simulate physical push.",
+    "entrance": "Staggered fade up for grid items using framer-motion.",
+    "pdp_preview": "Instant update on text/image upload, with subtle ping animation on the preview container to indicate a change."
+  },
+  "media_assets": {
+    "hero": {
+      "url": "https://images.pexels.com/photos/4271686/pexels-photo-4271686.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "A stacked set of pastel-colored gift boxes",
+      "alt": "Customized gift boxes"
+    },
+    "categories": {
+      "photo_mug": {
+        "url": "https://images.unsplash.com/photo-1653104838836-3c79156a7d99?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzB8MHwxfHNlYXJjaHw0fHxjdXN0b21pemVkJTIwcGhvdG8lMjBtdWd8ZW58MHx8fHwxNzc3MTkwNTAyfDA&ixlib=rb-4.1.0&q=85",
+        "description": "White coffee mug mockup",
+        "alt": "Customized Photo Mug"
+      },
+      "t_shirt": {
+        "url": "https://images.unsplash.com/photo-1622445272461-c6580cab8755?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2MzR8MHwxfHNlYXJjaHwxfHxibGFuayUyMHdoaXRlJTIwdC1zaGlydCUyMG1vZGVsfGVufDB8fHx8MTc3NzE5MDUwMXww&ixlib=rb-4.1.0&q=85",
+        "description": "Blank white t-shirt mockup on model",
+        "alt": "Customized T-Shirt"
+      },
+      "photo_frame": {
+        "url": "https://images.unsplash.com/photo-1550243595-4cb7dd708a89?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHw0fHxibGFuayUyMHBob3RvJTIwZnJhbWUlMjBsaXZpbmclMjByb29tfGVufDB8fHx8MTc3NzE5MDUwMXww&ixlib=rb-4.1.0&q=85",
+        "description": "Blank photo frame mockup in a living room",
+        "alt": "Customized Photo Frame"
+      },
+      "cushion": {
+        "url": "https://images.unsplash.com/photo-1630655115300-7f2c2d4364e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwyfHxibGFuayUyMHdoaXRlJTIwY3VzaGlvbiUyMGxpdmluZyUyMHJvb218ZW58MHx8fHwxNzc3MTkwNTEwfDA&ixlib=rb-4.1.0&q=85",
+        "description": "White textile cushion mockup",
+        "alt": "Customized Cushion"
+      }
+    }
+  },
+  "testing_attributes": {
+    "required": true,
+    "convention": "data-testid='[role]-[action]'",
+    "examples": ["data-testid='hero-shop-button'", "data-testid='product-customize-btn'", "data-testid='nav-cart-icon'"]
+  },
+  "libraries_to_install": [
+    "react-fast-marquee",
+    "@phosphor-icons/react",
+    "lucide-react",
+    "framer-motion"
+  ]
+}

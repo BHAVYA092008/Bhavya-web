@@ -23,9 +23,10 @@ export default function AdminProducts() {
   const [categories, setCategories] = useState([]);
 
   const load = () => api.get("/admin/products").then((r) => setProducts(r.data));
+  const loadCats = () => api.get("/categories").then((r) => setCategories(r.data));
   useEffect(() => {
     load();
-    api.get("/categories").then((r) => setCategories(r.data));
+    loadCats();
   }, []);
 
   const save = async (e) => {
@@ -43,6 +44,7 @@ export default function AdminProducts() {
       }
       setEditing(null);
       load();
+      loadCats();
     } catch (e) {
       alert("Save failed: " + (e.response?.data?.detail || e.message));
     }
@@ -111,10 +113,19 @@ export default function AdminProducts() {
               </Field>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <Field label="Category *">
-                  <select className="brut-input w-full" data-testid="product-category" value={editing.category} onChange={(e) => setEditing({...editing, category: e.target.value})}>
-                    {categories.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
-                  </select>
+                <Field label="Category *" hint="Apni custom category likh sakte ho ya list me se chuno">
+                  <input
+                    list="category-list"
+                    required
+                    placeholder="e.g. Diwali Gifts, Photo Mugs..."
+                    data-testid="product-category"
+                    className="brut-input w-full"
+                    value={editing.category}
+                    onChange={(e) => setEditing({...editing, category: e.target.value})}
+                  />
+                  <datalist id="category-list">
+                    {categories.map((c) => <option key={c.slug} value={c.name}>{c.name}</option>)}
+                  </datalist>
                 </Field>
                 <Field label="Price (₹) *">
                   <input type="number" min="1" required placeholder="299" data-testid="product-price" className="brut-input w-full" value={editing.price} onChange={(e) => setEditing({...editing, price: e.target.value})}/>

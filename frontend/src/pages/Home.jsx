@@ -72,10 +72,10 @@ export default function Home() {
           <Link to="/products" className="hidden md:flex items-center gap-1 text-sm text-[#5A4A52] hover:text-[#2A1F26] hover:gap-2 transition-all">View all <ArrowRight size={14}/></Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {categories.map((cat) => (
+          {categories.slice(0, 8).map((cat) => (
             <Link key={cat.slug} to={`/products?cat=${cat.slug}`} data-testid={`category-${cat.slug}`} className="brut-card group">
               <div className="aspect-square overflow-hidden bg-[#FDF6F4]">
-                <img src={CATEGORY_IMAGES[cat.slug] || cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
+                <img src={CATEGORY_IMAGES[cat.slug] || cat.image || "https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=600"} alt={cat.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"/>
               </div>
               <div className="p-4 flex items-center justify-between">
                 <div className="font-display text-base md:text-lg font-semibold text-[#2A1F26]">{cat.name}</div>

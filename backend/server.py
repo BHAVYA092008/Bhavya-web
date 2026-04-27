@@ -279,6 +279,9 @@ async def get_product(pid: str):
 async def create_product(body: ProductBody, _: dict = Depends(require_admin)):
     pid = str(uuid.uuid4())
     doc = body.model_dump()
+    # Auto-slugify category if user typed free text
+    if doc.get("category"):
+        doc["category"] = slugify(doc["category"])
     doc["id"] = pid
     doc["created_at"] = datetime.now(timezone.utc).isoformat()
     await db.products.insert_one(doc)
@@ -288,6 +291,8 @@ async def create_product(body: ProductBody, _: dict = Depends(require_admin)):
 @api_router.put("/admin/products/{pid}")
 async def update_product(pid: str, body: ProductBody, _: dict = Depends(require_admin)):
     update = body.model_dump()
+    if update.get("category"):
+        update["category"] = slugify(update["category"])
     res = await db.products.update_one({"id": pid}, {"$set": update})
     if res.matched_count == 0:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -306,17 +311,59 @@ async def admin_list_products(_: dict = Depends(require_admin)):
     items = await db.products.find({}, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return items
 
-# ----------- Categories (static seed) -----------
-CATEGORIES = [
+# ----------- Categories -----------
+DEFAULT_CATEGORIES = [
     {"slug": "photo-mugs", "name": "Photo Mugs", "image": "https://images.unsplash.com/photo-1653104838836-3c79156a7d99?crop=entropy&cs=srgb&fm=jpg&w=600"},
     {"slug": "t-shirts", "name": "T-Shirts", "image": "https://images.unsplash.com/photo-1622445272461-c6580cab8755?crop=entropy&cs=srgb&fm=jpg&w=600"},
     {"slug": "cushions", "name": "Cushions", "image": "https://images.unsplash.com/photo-1630655115300-7f2c2d4364e0?crop=entropy&cs=srgb&fm=jpg&w=600"},
     {"slug": "photo-frames", "name": "Photo Frames", "image": "https://images.unsplash.com/photo-1550243595-4cb7dd708a89?crop=entropy&cs=srgb&fm=jpg&w=600"},
+    {"slug": "keychains", "name": "Keychains", "image": "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=600"},
+    {"slug": "phone-covers", "name": "Phone Covers", "image": "https://images.unsplash.com/photo-1601593346740-925612772716?w=600"},
+    {"slug": "water-bottles", "name": "Water Bottles", "image": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600"},
+    {"slug": "mouse-pads", "name": "Mouse Pads", "image": "https://images.unsplash.com/photo-1527814050087-3793815479db?w=600"},
+    {"slug": "wall-clocks", "name": "Wall Clocks", "image": "https://images.unsplash.com/photo-1517999144091-3d9dca6d1e43?w=600"},
+    {"slug": "name-plates", "name": "Name Plates", "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600"},
+    {"slug": "calendars", "name": "Calendars", "image": "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=600"},
+    {"slug": "photo-books", "name": "Photo Books / Albums", "image": "https://images.unsplash.com/photo-1544207916-1d2cdcfd0a72?w=600"},
+    {"slug": "posters", "name": "Posters", "image": "https://images.unsplash.com/photo-1561839561-b13bcfe95249?w=600"},
+    {"slug": "magnets", "name": "Fridge Magnets", "image": "https://images.unsplash.com/photo-1580837119756-563d608dd119?w=600"},
+    {"slug": "led-lamps", "name": "LED Photo Lamps", "image": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600"},
+    {"slug": "tote-bags", "name": "Tote Bags", "image": "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=600"},
+    {"slug": "caps", "name": "Caps & Hats", "image": "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600"},
+    {"slug": "gift-hampers", "name": "Gift Hampers", "image": "https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=600"},
+    {"slug": "wedding-gifts", "name": "Wedding Gifts", "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600"},
+    {"slug": "anniversary-gifts", "name": "Anniversary Gifts", "image": "https://images.unsplash.com/photo-1513278974582-3e1b4a4fa21e?w=600"},
 ]
+
+def slugify(name: str) -> str:
+    s = name.strip().lower()
+    out = []
+    prev_dash = False
+    for ch in s:
+        if ch.isalnum():
+            out.append(ch); prev_dash = False
+        elif not prev_dash:
+            out.append("-"); prev_dash = True
+    return "".join(out).strip("-")
 
 @api_router.get("/categories")
 async def list_categories():
-    return CATEGORIES
+    # Merge defaults with any custom categories created via product creation
+    seen = {c["slug"]: c for c in DEFAULT_CATEGORIES}
+    used_slugs = await db.products.distinct("category", {"is_active": True})
+    for slug in used_slugs:
+        if slug and slug not in seen:
+            seen[slug] = {"slug": slug, "name": slug.replace("-", " ").title(), "image": ""}
+    return list(seen.values())
+
+@api_router.get("/admin/categories")
+async def admin_list_categories(_: dict = Depends(require_admin)):
+    seen = {c["slug"]: c for c in DEFAULT_CATEGORIES}
+    used_slugs = await db.products.distinct("category")
+    for slug in used_slugs:
+        if slug and slug not in seen:
+            seen[slug] = {"slug": slug, "name": slug.replace("-", " ").title(), "image": ""}
+    return list(seen.values())
 
 # ----------- Coupons -----------
 @api_router.post("/coupons/validate")

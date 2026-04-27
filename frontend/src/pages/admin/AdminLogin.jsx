@@ -27,8 +27,8 @@ export default function AdminLogin() {
   return (
     <div className="max-w-md mx-auto px-6 py-16" data-testid="admin-login-page">
       <div className="brut-card p-8">
-        <div className="text-xs font-bold uppercase tracking-widest text-[#FF7A4B]">Admin</div>
-        <h1 className="font-display text-3xl font-black uppercase">Login</h1>
+        <div className="text-xs font-medium uppercase tracking-[0.2em] text-[#D4A5A5]">Admin</div>
+        <h1 className="font-display text-3xl font-semibold text-[#2A1F26]">Login</h1>
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <input data-testid="admin-password" type="password" required placeholder="Admin Password" className="brut-input w-full" value={password} onChange={(e) => setPassword(e.target.value)}/>
           {err && <div className="text-red-600 text-sm font-bold" data-testid="admin-error">{err}</div>}

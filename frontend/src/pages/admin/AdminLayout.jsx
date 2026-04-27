@@ -10,7 +10,7 @@ export default function AdminLayout({ children }) {
   };
 
   const linkCls = ({ isActive }) =>
-    `flex items-center gap-2 px-4 py-3 border-2 border-black font-bold uppercase text-sm ${isActive ? "bg-[#FF9E79] brut-shadow-sm" : "bg-white hover:bg-[#FFE5D9]"}`;
+    `flex items-center gap-2 px-4 py-3 rounded-lg font-medium text-sm transition-all ${isActive ? "bg-[#D4A5A5] text-white" : "bg-white border border-[#EFE3E0] text-[#5A4A52] hover:bg-[#FDF6F4]"}`;
 
   return (
     <div className="min-h-screen bg-[#FFFDF0]" data-testid="admin-layout">

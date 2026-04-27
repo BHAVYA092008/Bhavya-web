@@ -76,7 +76,6 @@ export default function Checkout() {
     e.preventDefault();
     if (paymentMethod === "cod") return placeOrder();
 
-    // Razorpay flow
     const ok = await loadRazorpay();
     if (!ok) return alert("Razorpay failed to load. Please retry.");
     setSubmitting(true);
@@ -94,7 +93,7 @@ export default function Checkout() {
           email: form.customer_email,
           contact: form.customer_phone,
         },
-        theme: { color: "#FF9E79" },
+        theme: { color: "#D4A5A5" },
         handler: (response) => {
           placeOrder({
             razorpay_order_id: response.razorpay_order_id,
@@ -114,12 +113,12 @@ export default function Checkout() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-10" data-testid="checkout-page">
-      <h1 className="font-display text-4xl md:text-5xl font-black uppercase mb-8">Checkout</h1>
+      <h1 className="font-display text-4xl md:text-5xl font-semibold text-[#2A1F26] mb-8">Checkout</h1>
       <form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <div className="brut-card p-6">
-            <div className="font-display text-xl font-black uppercase mb-4">Delivery Details</div>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="font-display text-lg font-semibold text-[#2A1F26] mb-4">Delivery Details</div>
+            <div className="grid sm:grid-cols-2 gap-3">
               <input required placeholder="Full Name *" data-testid="checkout-name" className="brut-input" value={form.customer_name} onChange={(e) => setForm({...form, customer_name: e.target.value})}/>
               <input required placeholder="Phone *" data-testid="checkout-phone" className="brut-input" value={form.customer_phone} onChange={(e) => setForm({...form, customer_phone: e.target.value})}/>
               <input type="email" placeholder="Email (optional)" data-testid="checkout-email" className="brut-input sm:col-span-2" value={form.customer_email} onChange={(e) => setForm({...form, customer_email: e.target.value})}/>
@@ -130,17 +129,17 @@ export default function Checkout() {
           </div>
 
           <div className="brut-card p-6">
-            <div className="font-display text-xl font-black uppercase mb-4">Payment Method</div>
+            <div className="font-display text-lg font-semibold text-[#2A1F26] mb-4">Payment Method</div>
             <div className="space-y-3">
               {[
                 { id: "razorpay", label: "Pay Online (UPI / Card / NetBanking)", desc: "Powered by Razorpay" },
                 { id: "cod", label: "Cash on Delivery", desc: "Pay when you receive your order" },
               ].map((p) => (
-                <label key={p.id} data-testid={`payment-${p.id}`} className={`flex items-center gap-3 border-2 border-black p-4 cursor-pointer ${paymentMethod === p.id ? "bg-[#FFE5D9] brut-shadow-sm" : "bg-white"}`}>
-                  <input type="radio" checked={paymentMethod === p.id} onChange={() => setPaymentMethod(p.id)} className="w-4 h-4"/>
+                <label key={p.id} data-testid={`payment-${p.id}`} className={`flex items-center gap-3 border rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === p.id ? "bg-[#FDF6F4] border-[#D4A5A5]" : "bg-white border-[#EFE3E0]"}`}>
+                  <input type="radio" checked={paymentMethod === p.id} onChange={() => setPaymentMethod(p.id)} className="w-4 h-4 accent-[#D4A5A5]"/>
                   <div className="flex-1">
-                    <div className="font-bold">{p.label}</div>
-                    <div className="text-xs text-[#666]">{p.desc}</div>
+                    <div className="font-medium text-[#2A1F26]">{p.label}</div>
+                    <div className="text-xs text-[#8B7B81]">{p.desc}</div>
                   </div>
                 </label>
               ))}
@@ -148,31 +147,31 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="brut-card p-6 h-fit lg:sticky lg:top-24">
-          <div className="font-display text-xl font-black uppercase mb-4">Order Summary</div>
+        <div className="brut-card p-6 h-fit lg:sticky lg:top-28">
+          <div className="font-display text-lg font-semibold text-[#2A1F26] mb-4">Order Summary</div>
           <div className="space-y-2 max-h-48 overflow-auto">
             {items.map((i) => (
               <div key={i.lineId} className="flex justify-between text-sm">
-                <span className="truncate">{i.product_name} × {i.quantity}</span>
-                <span className="font-bold">₹{i.unit_price * i.quantity}</span>
+                <span className="truncate text-[#5A4A52]">{i.product_name} × {i.quantity}</span>
+                <span className="font-medium text-[#2A1F26]">₹{i.unit_price * i.quantity}</span>
               </div>
             ))}
           </div>
-          <div className="border-t-2 border-black my-4"/>
+          <div className="border-t border-[#EFE3E0] my-4"/>
 
           <div className="flex gap-2 mb-3">
             <input data-testid="coupon-input" value={coupon} onChange={(e) => setCoupon(e.target.value)} placeholder="Coupon code" className="brut-input flex-1"/>
-            <button type="button" onClick={applyCoupon} data-testid="coupon-apply-btn" className="brut-btn brut-btn-secondary"><Tag size={16}/></button>
+            <button type="button" onClick={applyCoupon} data-testid="coupon-apply-btn" className="brut-btn brut-btn-secondary !px-4"><Tag size={14}/></button>
           </div>
-          {discount.amount > 0 && <div className="text-sm text-green-700 font-bold flex items-center gap-1 mb-2"><Check size={14}/> {discount.code} applied</div>}
+          {discount.amount > 0 && <div className="text-xs text-green-700 font-medium flex items-center gap-1 mb-2"><Check size={12}/> {discount.code} applied</div>}
 
-          <div className="flex justify-between text-sm mb-1"><span>Subtotal</span><span>₹{subtotal}</span></div>
-          <div className="flex justify-between text-sm mb-1"><span>Shipping</span><span>{shipping === 0 ? "FREE" : `₹${shipping}`}</span></div>
+          <div className="flex justify-between text-sm mb-1"><span className="text-[#5A4A52]">Subtotal</span><span>₹{subtotal}</span></div>
+          <div className="flex justify-between text-sm mb-1"><span className="text-[#5A4A52]">Shipping</span><span>{shipping === 0 ? "FREE" : `₹${shipping}`}</span></div>
           {discount.amount > 0 && <div className="flex justify-between text-sm mb-1 text-green-700"><span>Discount</span><span>-₹{discount.amount}</span></div>}
-          <div className="border-t-2 border-black my-3"/>
-          <div className="flex justify-between font-display text-2xl font-black"><span>Total</span><span data-testid="checkout-total">₹{total}</span></div>
-          <button type="submit" disabled={submitting} className="brut-btn w-full justify-center mt-4" data-testid="place-order-btn">
-            {submitting ? <><Loader2 size={16} className="animate-spin"/> Processing...</> : `Place Order · ₹${total}`}
+          <div className="border-t border-[#EFE3E0] my-3"/>
+          <div className="flex justify-between font-display text-xl font-semibold text-[#2A1F26]"><span>Total</span><span data-testid="checkout-total">₹{total}</span></div>
+          <button type="submit" disabled={submitting} className="brut-btn btn-accent w-full justify-center mt-5" data-testid="place-order-btn">
+            {submitting ? <><Loader2 size={14} className="animate-spin"/> Processing...</> : `Place Order · ₹${total}`}
           </button>
         </div>
       </form>

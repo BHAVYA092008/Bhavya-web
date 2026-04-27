@@ -13,10 +13,10 @@ export default function AdminDashboard() {
   if (!stats) return <AdminLayout><div className="p-8">Loading...</div></AdminLayout>;
 
   const cards = [
-    { label: "Total Orders", value: stats.total_orders, color: "#FFD6E7" },
-    { label: "Earnings", value: `₹${stats.earnings}`, color: "#C9F0DD" },
-    { label: "Pending", value: stats.pending, color: "#FFF1B6" },
-    { label: "Delivered", value: stats.delivered, color: "#C8E0FF" },
+    { label: "Total Orders", value: stats.total_orders, color: "#FBE9EC" },
+    { label: "Earnings", value: `₹${stats.earnings}`, color: "#FAF6F2" },
+    { label: "Pending", value: stats.pending, color: "#FFF4E5" },
+    { label: "Delivered", value: stats.delivered, color: "#E5F5EA" },
   ];
 
   return (

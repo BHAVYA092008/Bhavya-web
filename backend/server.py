@@ -394,11 +394,18 @@ async def list_coupons(_: dict = Depends(require_admin)):
 @api_router.post("/payment/create-order")
 async def create_razorpay_order(body: CreateRazorpayOrderBody):
     amount_paise = int(round(body.amount * 100))
-    order = razor_client.order.create({
-        "amount": amount_paise,
-        "currency": "INR",
-        "payment_capture": 1,
-    })
+    try:
+        order = razor_client.order.create({
+            "amount": amount_paise,
+            "currency": "INR",
+            "payment_capture": 1,
+        })
+    except Exception as e:
+        logger.error(f"Razorpay order creation failed: {e}")
+        raise HTTPException(
+            status_code=503,
+            detail="Online payment temporarily unavailable. Please use Cash on Delivery (COD) or contact us via WhatsApp.",
+        )
     return {"order_id": order["id"], "amount": order["amount"], "currency": order["currency"], "key_id": RAZORPAY_KEY_ID}
 
 def verify_razorpay_signature(order_id: str, payment_id: str, signature: str) -> bool:
